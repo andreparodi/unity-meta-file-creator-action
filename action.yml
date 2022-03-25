@@ -1,0 +1,10 @@
+name: 'Unity meta file creator github action'
+description: 'A github action to create missing meta files used by unity game engine'
+inputs:
+  directory:  # id of input
+    description: 'The directory to start work`'
+    required: true
+    default: '.'
+runs:
+  using: 'node16'
+  main: 'index.js'
