@@ -37,6 +37,9 @@ AssemblyDefinitionImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: `;
+const unknownTemplate = `fileFormatVersion: 2
+guid: %%GUID%%
+timeCreated: 1648391988`;
 
 run()
 
@@ -91,6 +94,10 @@ function processFile( file)
     else if (path.extname(file) === ".asmdef")
     {
         writeMetaFile(file, assemblyDefinitionTemplate);
+    }
+    else if (path.extname(file) != ".meta")
+    {
+        writeMetaFile(file, unknownTemplate);
     }
 }
 
