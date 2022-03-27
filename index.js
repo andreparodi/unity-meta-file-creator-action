@@ -4,10 +4,39 @@ const path = require('path');
 const fs = require('fs');
 const {randomUUID} = require('crypto');
 
-const directoryTemplate = "templates/directory.meta";
-const monoTemplate = "templates/mono.meta";
-const packageManifestTemplate = "templates/package-manifest.meta";
-const assemblyDefinitionTemplate = "templates/assemblydef.meta";
+const directoryTemplate = `fileFormatVersion: 2
+guid: %%GUID%%
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: `;
+const monoTemplate = `fileFormatVersion: 2
+guid: %%GUID%%
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: `;
+const packageManifestTemplate = `fileFormatVersion: 2
+guid: %%GUID%%
+PackageManifestImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: `;
+const assemblyDefinitionTemplate = `fileFormatVersion: 2
+guid: %%GUID%%
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: `;
 
 run()
 
@@ -65,24 +94,17 @@ function processFile( file)
     }
 }
 
-function writeMetaFile(origFilePath, templatePath)
+function writeMetaFile(origFilePath, templateString)
 {
-    fs.readFile(templatePath, 'utf8' , (err, data) => {
+    var guid = randomUUID().toString().replaceAll('-', '')
+    var metaFileContents = templateString.replace('%%GUID%%', guid)
+    console.log(`Writing meta file for ${origFilePath}`)
+    fs.writeFile(origFilePath + ".meta", metaFileContents, err => {
         if (err) {
-            myFail(err)
+            myFail(err);
             return
         }
-
-        var guid = randomUUID().toString().replaceAll('-', '')
-        var metaFileContents = data.replace('%%GUID%%', guid)
-        console.log(`Writing meta file for ${origFilePath}`)
-        fs.writeFile(origFilePath + ".meta", metaFileContents, err => {
-            if (err) {
-                myFail(err);
-                return
-            }
-          })
-      })
+    })
 }
 
 function myFail(message, err) {
